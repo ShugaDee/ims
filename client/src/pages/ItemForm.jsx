@@ -24,7 +24,8 @@ const ItemForm = () => {
             const fetchItem = async () => {
                 try {
                     const config = { headers: { 'x-auth-token': token } };
-                    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/inventory?id=${id}`, config); // Our API returns array, need to filter or update API to get single
+                    const apiBase = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || '') + '?__ngrok_skip_browser_warning=true';
+                    const res = await axios.get(`${apiBase}/api/inventory?id=${id}`, config); // Our API returns array, need to filter or update API to get single
                     // Actually, let's just fetch all and find (or update API, but for speed fetch all)
                     // Optimization: Better to have GET /api/inventory/:id
                     // I will assume I need to fetch all and filter client side because I didn't verify GET /:id exists in plan BUT I did create it in routes/inventory.js!
@@ -35,7 +36,8 @@ const ItemForm = () => {
                     // So I will fetch all and find, OR just add GET /:id to backend quickly.
                     // Let's fetch all and filter for simplicity for now.
 
-                    const listRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/inventory`, config);
+                    const apiBase = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || '') + '?__ngrok_skip_browser_warning=true';
+                    const listRes = await axios.get(`${apiBase}/api/inventory`, config);
                     const item = listRes.data.find(i => i._id === id);
                     if (item) {
                         setFormData({
@@ -70,9 +72,11 @@ const ItemForm = () => {
 
         try {
             if (isEditMode) {
-                await axios.put(`${import.meta.env.VITE_API_URL}/api/inventory/${id}`, formData, config);
+                const apiBase = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || '') + '?__ngrok_skip_browser_warning=true';
+                await axios.put(`${apiBase}/api/inventory/${id}`, formData, config);
             } else {
-                await axios.post(`${import.meta.env.VITE_API_URL}/api/inventory`, formData, config);
+                const apiBase = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || '') + '?__ngrok_skip_browser_warning=true';
+                await axios.post(`${apiBase}/api/inventory`, formData, config);
             }
             navigate('/');
         } catch (err) {
