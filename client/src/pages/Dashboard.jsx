@@ -15,7 +15,7 @@ const Dashboard = () => {
                     'x-auth-token': token
                 }
             };
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/inventory`, config);
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/inventory`, config);
             setItems(res.data);
             setLoading(false);
         } catch (err) {
@@ -32,7 +32,7 @@ const Dashboard = () => {
                     'x-auth-token': token
                 }
             };
-            await axios.delete(`${import.meta.env.VITE_API_URL}/api/inventory/${id}`, config);
+            await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/inventory/${id}`, config);
             setItems(items.filter(item => item._id !== id));
         } catch (err) {
             console.error(err);

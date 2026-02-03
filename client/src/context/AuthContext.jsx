@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/user`);
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/auth/user`);
             dispatch({
                 type: 'USER_LOADED',
                 payload: res.data
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, formData, config);
+            const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/auth/register`, formData, config);
 
             localStorage.setItem('token', res.data.token); // Fix: Set token immediately
 
@@ -109,7 +109,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, formData, config);
+            const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/auth/login`, formData, config);
 
             localStorage.setItem('token', res.data.token); // Fix: Set token immediately
 
