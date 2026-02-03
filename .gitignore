@@ -1,0 +1,13 @@
+# Secrets
+**/.env
+**/.env.local
+
+# Dependencies
+**/node_modules/
+
+# Production builds
+/client/dist
+/client/build
+
+# Misc
+.DS_Store
