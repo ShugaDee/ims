@@ -15,8 +15,9 @@ const Dashboard = () => {
                     'x-auth-token': token
                 }
             };
-            const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/inventory`, config);
-            setItems(res.data);
+            const apiBase = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || '') + '?__ngrok_skip_browser_warning=true';
+            const res = await axios.get(`${apiBase}/api/inventory`, config);
+            setItems(Array.isArray(res.data) ? res.data : res.data ? [res.data] : []);
             setLoading(false);
         } catch (err) {
             console.error(err);
@@ -32,7 +33,8 @@ const Dashboard = () => {
                     'x-auth-token': token
                 }
             };
-            await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/inventory/${id}`, config);
+            const apiBase = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || '') + '?__ngrok_skip_browser_warning=true';
+            await axios.delete(`${apiBase}/api/inventory/${id}`, config);
             setItems(items.filter(item => item._id !== id));
         } catch (err) {
             console.error(err);
