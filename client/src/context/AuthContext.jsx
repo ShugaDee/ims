@@ -55,16 +55,17 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
 
+    const apiBase = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || '') + '?__ngrok_skip_browser_warning=true';
+
     // Load User
     const loadUser = async () => {
+        const config = { headers: {} };
         if (localStorage.token) {
-            axios.defaults.headers.common['x-auth-token'] = localStorage.token;
-        } else {
-            delete axios.defaults.headers.common['x-auth-token'];
+            config.headers['x-auth-token'] = localStorage.token;
         }
 
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/auth/user`);
+            const res = await axios.get(`${apiBase}/api/auth/user`, config);
             dispatch({
                 type: 'USER_LOADED',
                 payload: res.data
@@ -83,7 +84,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/auth/register`, formData, config);
+            const res = await axios.post(`${apiBase}/api/auth/register`, formData, config);
 
             localStorage.setItem('token', res.data.token); // Fix: Set token immediately
 
@@ -95,7 +96,7 @@ export const AuthProvider = ({ children }) => {
         } catch (err) {
             dispatch({
                 type: 'REGISTER_FAIL',
-                payload: err.response.data.msg
+                payload: err.response?.data?.msg || err.message
             });
         }
     };
@@ -109,7 +110,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/auth/login`, formData, config);
+            const res = await axios.post(`${apiBase}/api/auth/login`, formData, config);
 
             localStorage.setItem('token', res.data.token); // Fix: Set token immediately
 
@@ -121,7 +122,7 @@ export const AuthProvider = ({ children }) => {
         } catch (err) {
             dispatch({
                 type: 'LOGIN_FAIL',
-                payload: err.response.data.msg
+                payload: err.response?.data?.msg || err.message
             });
         }
     };
